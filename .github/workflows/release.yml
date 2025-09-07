@@ -1,0 +1,27 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Registry
+        run: docker login registry.fanzru.dev -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and tag Docker image
+        # Menggunakan tag GitHub sebagai tag image Docker
+        run: |
+          IMAGE_TAG=${GITHUB_REF##*/}
+          docker build -t registry.fanzru.dev/next-template:${IMAGE_TAG} .
+
+      - name: Push image to registry
+        run: |
+          IMAGE_TAG=${GITHUB_REF##*/}
+          docker push registry.fanzru.dev/next-template:${IMAGE_TAG}
