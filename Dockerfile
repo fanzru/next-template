@@ -5,8 +5,8 @@ FROM node:20-alpine AS builder
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and bun.lockb, then install dependencies using Bun
-COPY package.json bun.lockb ./
+# Copy package.json and bun.lock, then install dependencies using Bun
+COPY package.json bun.lock ./
 RUN bun install
 
 # Copy all source files from the host to the container
